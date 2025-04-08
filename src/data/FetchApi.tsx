@@ -16,7 +16,7 @@ export const FetchApi = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://api.pokemontcg.io/v2/cards?q=set.id:base4&pageSize=250"
+          "https://api.pokemontcg.io/v2/cards?q=set.id:base2&pageSize=250"
         );
 
         if (!response.ok) {
@@ -65,10 +65,7 @@ export const FetchApi = () => {
       <h1>Données récupérées :</h1>
       {cards.length > 0 &&
         cards.map((card) => (
-          <div
-            key={card.name}
-            onClick={() => toggleFavorite(card)}
-          >
+          <div key={card.name} onClick={() => toggleFavorite(card)}>
             <h2>{card.name}</h2>
             <img src={card.picture} alt={card.name} />
             <p>{card.price}€</p>
