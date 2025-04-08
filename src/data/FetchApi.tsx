@@ -7,8 +7,10 @@ const pokemonCards: PokemonCard[] = [
 
 export const FetchApi = () => {
   const [cards, setCards] = useState(pokemonCards);
+  const [favorites, setFavorites] = useState<PokemonCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +44,18 @@ export const FetchApi = () => {
     fetchData();
   }, []);
 
+  const toggleFavorite = (card: PokemonCard) => {
+    setFavorites((prevFavorites) => {
+      if (prevFavorites.some((fav) => fav.name === card.name)) {
+        // Remove from favorites
+        return prevFavorites.filter((fav) => fav.name !== card.name);
+      } else {
+        // Add to favorites
+        return [...prevFavorites, card];
+      }
+    });
+  };
+
   if (loading) return <p>Chargement...</p>;
   if (error) return <p>Erreur : {error}</p>;
 
@@ -50,12 +64,28 @@ export const FetchApi = () => {
       <h1>Données récupérées :</h1>
       {cards.length > 0 &&
         cards.map((card) => (
-          <div key={card.name}>
+          <div
+            key={card.name}
+            onClick={() => toggleFavorite(card)}
+          >
             <h2>{card.name}</h2>
-            <img src={card.picture} />
+            <img src={card.picture} alt={card.name} />
             <p>{card.price}€</p>
           </div>
         ))}
+
+      <h2>Favoris :</h2>
+      {favorites.length > 0 ? (
+        favorites.map((fav) => (
+          <div key={fav.name}>
+            <h2>{fav.name}</h2>
+            <img src={fav.picture} alt={fav.name} />
+            <p>{fav.price}€</p>
+          </div>
+        ))
+      ) : (
+        <p>Aucun favori pour le moment.</p>
+      )}
     </div>
   );
 };
