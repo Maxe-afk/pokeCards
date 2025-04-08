@@ -1,3 +1,5 @@
+import Styles from "../components/SearchBar.module.css";
+
 type Props = {
   onSearch: (query: string) => void;
 };
@@ -8,11 +10,11 @@ export const Searchbar = ({ onSearch }: Props) => {
   };
 
   return (
-    <form>
+    <form class={Styles.form}>
       <input
         type="text"
         onChange={handleChange}
-        placeholder="Rechercher un Pokémon"
+        placeholder="Rechercher une carte"
       />
     </form>
   );
