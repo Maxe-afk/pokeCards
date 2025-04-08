@@ -46,7 +46,7 @@ export const FetchApi = () => {
   if (error) return <p>Erreur : {error}</p>;
 
   return (
-    <div className="App">
+    <div>
       <h1>Données récupérées :</h1>
       {cards.length > 0 &&
         cards.map((card) => (
