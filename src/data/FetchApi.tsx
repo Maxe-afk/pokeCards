@@ -3,7 +3,7 @@ import { Searchbar } from "../components/SearchBar";
 import { PokemonCard } from "../model/PokemonCard";
 
 const pokemonCards: PokemonCard[] = [
-  new PokemonCard("Salamèche", "Salamèche.png", 150, ["fire"], "1"),
+  new PokemonCard("1", "Salamèche", "Salamèche.png", 150, ["fire"]),
 ];
 
 export const FetchApi = () => {
@@ -72,16 +72,23 @@ export const FetchApi = () => {
       <Searchbar onSearch={setSearchQuery} />
       <div>
         <h1>Données récupérées :</h1>
-        {filteredCards.length > 0 &&
+        {filteredCards.length > 0 ? (
           filteredCards.map((card) => (
             <div key={card.id} onClick={() => toggleFavorite(card)}>
               <h2>{card.name}</h2>
               <img src={card.picture} alt={card.name} />
               <p>{card.price}€</p>
             </div>
-          ))}
+          ))
+        ) : (
+          <p>Aucune carte ne correspond à votre recherche</p>
+        )}
 
         <h2>Favoris :</h2>
+        <h4>
+          Valeur de votre collection:{" "}
+          {favorites.reduce((total, fav) => total + fav.price, 0).toFixed(2)}€
+        </h4>
         {favorites.length > 0 ? (
           favorites.map((fav) => (
             <div key={fav.id}>
