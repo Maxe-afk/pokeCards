@@ -73,6 +73,7 @@ export const FetchApi = () => {
         ))}
 
       <h2>Favoris :</h2>
+      <h4>Valeur de votre collection: {favorites.reduce((total, fav) => total + fav.price, 0).toFixed(2)}€</h4>
       {favorites.length > 0 ? (
         favorites.map((fav) => (
           <div key={fav.name}>
