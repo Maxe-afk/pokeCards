@@ -1,3 +1,7 @@
-export class PokemonCard{
-    constructor(public name: string, public picture: string){}
+export class PokemonCard {
+  constructor(
+    public name: string,
+    public picture: string,
+    public price: number
+  ) {}
 }
