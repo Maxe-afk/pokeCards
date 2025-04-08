@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { PokemonCard } from "../model/PokemonCard";
 
 const pokemonCards: PokemonCard[] = [
-  new PokemonCard("Salamèche", "Salamèche.png", 150),
+  new PokemonCard("Salamèche", "Salamèche.png", 150, ["fire"]),
 ];
 
 export const FetchApi = () => {
@@ -14,7 +14,7 @@ export const FetchApi = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          "https://api.pokemontcg.io/v2/cards?q=set.id:base1&pageSize=250"
+          "https://api.pokemontcg.io/v2/cards?q=set.id:base4&pageSize=250"
         );
 
         if (!response.ok) {
@@ -28,7 +28,8 @@ export const FetchApi = () => {
             new PokemonCard(
               newEntry.name,
               newEntry.images.large,
-              newEntry.cardmarket.prices.averageSellPrice
+              newEntry.cardmarket.prices.averageSellPrice,
+              newEntry.types
             )
           );
         });
@@ -46,7 +47,7 @@ export const FetchApi = () => {
   if (error) return <p>Erreur : {error}</p>;
 
   return (
-    <div className="App">
+    <div>
       <h1>Données récupérées :</h1>
       {cards.length > 0 &&
         cards.map((card) => (
