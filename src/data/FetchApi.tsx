@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+import { Searchbar } from "../components/SearchBar";
 import { PokemonCard } from "../model/PokemonCard";
 
 const pokemonCards: PokemonCard[] = [
-  new PokemonCard("Salamèche", "Salamèche.png", 150, ["fire"]),
+  new PokemonCard("Salamèche", "Salamèche.png", 150, ["fire"], "1"),
 ];
 
 export const FetchApi = () => {
@@ -10,6 +11,7 @@ export const FetchApi = () => {
   const [favorites, setFavorites] = useState<PokemonCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,9 +30,10 @@ export const FetchApi = () => {
         result.data.map((newEntry) => {
           newPokemons.push(
             new PokemonCard(
+              newEntry.id,
               newEntry.name,
               newEntry.images.large,
-              newEntry.cardmarket.prices.averageSellPrice,
+              newEntry.cardmarket?.prices?.averageSellPrice ?? 0,
               newEntry.types
             )
           );
@@ -60,30 +63,37 @@ export const FetchApi = () => {
   if (loading) return <p>Chargement...</p>;
   if (error) return <p>Erreur : {error}</p>;
 
-  return (
-    <div>
-      <h1>Données récupérées :</h1>
-      {cards.length > 0 &&
-        cards.map((card) => (
-          <div key={card.name} onClick={() => toggleFavorite(card)}>
-            <h2>{card.name}</h2>
-            <img src={card.picture} alt={card.name} />
-            <p>{card.price}€</p>
-          </div>
-        ))}
+  const filteredCards = cards.filter((card) =>
+    card.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-      <h2>Favoris :</h2>
-      {favorites.length > 0 ? (
-        favorites.map((fav) => (
-          <div key={fav.name}>
-            <h2>{fav.name}</h2>
-            <img src={fav.picture} alt={fav.name} />
-            <p>{fav.price}€</p>
-          </div>
-        ))
-      ) : (
-        <p>Aucun favori pour le moment.</p>
-      )}
-    </div>
+  return (
+    <>
+      <Searchbar onSearch={setSearchQuery} />
+      <div>
+        <h1>Données récupérées :</h1>
+        {filteredCards.length > 0 &&
+          filteredCards.map((card) => (
+            <div key={card.id} onClick={() => toggleFavorite(card)}>
+              <h2>{card.name}</h2>
+              <img src={card.picture} alt={card.name} />
+              <p>{card.price}€</p>
+            </div>
+          ))}
+
+        <h2>Favoris :</h2>
+        {favorites.length > 0 ? (
+          favorites.map((fav) => (
+            <div key={fav.id}>
+              <h2>{fav.name}</h2>
+              <img src={fav.picture} alt={fav.name} />
+              <p>{fav.price}€</p>
+            </div>
+          ))
+        ) : (
+          <p>Aucun favori pour le moment.</p>
+        )}
+      </div>
+    </>
   );
 };
